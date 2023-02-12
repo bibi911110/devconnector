@@ -9,94 +9,74 @@ import ProfileExperience from './ProfileExperience';
 import ProfileEducation from './ProfileEducation';
 import ProfileGithub from './ProfileGithub';
 import { getProfileById } from '../../actions/profile';
-import {useTheme} from '../../ThemeContext';
+import { useTheme } from '../../ThemeContext';
 
-const Profile = ({
-  getProfileById,
-  profile: {
-     profile, loading
-    },
-  auth,
-  match
-}) => {
-  useEffect(() => {
-    getProfileById(match.params.id);
-  }, [getProfileById, match.params.id]);
+const Profile = ({ getProfileById, profile: { profile, loading }, auth, match }) => {
+    useEffect(() => {
+        getProfileById(match.params.id);
+    }, [getProfileById, match.params.id]);
 
-  const themeState = useTheme();
-  return (
-    <Fragment>
-      {profile === null || loading ? (
-        <Spinner />
-      ) : (
+    const themeState = useTheme();
+    return (
         <Fragment>
-          <Link to='/profiles' className='btn btn-light'>
-            Back To Profiles
-          </Link>
-          {auth.isAuthenticated &&
-            auth.loading === false &&
-            auth.user._id === profile.user._id && (
-              <Link to='/edit-profile' className='btn btn-dark'>
-                Edit Account
-              </Link>
-            )}
-          <div className='profile-grid my-1'>
-            <ProfileTop profile={profile} />
-            <ProfileAbout profile={profile} />
-            <div className={`profile-exp ${themeState.dark ? 'bg-dark' : 'bg-white'} p-2`}>
-              <h2 className='text-primary'>Experience</h2>
-              {profile.experience.length > 0 ? (
+            {profile === null || loading ? (
+                <Spinner />
+            ) : (
                 <Fragment>
-                  {profile.experience.map(experience => (
-                    <ProfileExperience
-                      key={experience._id}
-                      experience={experience}
-                    />
-                  ))}
-                </Fragment>
-              ) : (
-                <h4>No experience credentials</h4>
-              )}
-            </div>
+                    <Link to="/profiles" className="btn btn-light">
+                        Back To Profiles
+                    </Link>
+                    {auth.isAuthenticated && auth.loading === false && auth.user._id === profile.user._id && (
+                        <Link to="/edit-profile" className="btn btn-dark">
+                            Edit Account
+                        </Link>
+                    )}
+                    <div className="profile-grid my-1">
+                        <ProfileTop profile={profile} />
+                        <ProfileAbout profile={profile} />
+                        <div className={`profile-exp ${themeState.dark ? 'bg-dark' : 'bg-white'} p-2`}>
+                            <h2 className="text-primary">Experience</h2>
+                            {profile.experience.length > 0 ? (
+                                <Fragment>
+                                    {profile.experience.map((experience) => (
+                                        <ProfileExperience key={experience._id} experience={experience} />
+                                    ))}
+                                </Fragment>
+                            ) : (
+                                <h4>No experience credentials</h4>
+                            )}
+                        </div>
 
-            <div className={`profile-edu ${themeState.dark ? 'bg-dark' : 'bg-white'} p-2`}>
-              <h2 className='text-primary'>Education</h2>
-              {profile.education.length > 0 ? (
-                <Fragment>
-                  {profile.education.map(education => (
-                    <ProfileEducation
-                      key={education._id}
-                      education={education}
-                    />
-                  ))}
-                </Fragment>
-              ) : (
-                <h4>No education credentials</h4>
-              )}
-            </div>
+                        <div className={`profile-edu ${themeState.dark ? 'bg-dark' : 'bg-white'} p-2`}>
+                            <h2 className="text-primary">Education</h2>
+                            {profile.education.length > 0 ? (
+                                <Fragment>
+                                    {profile.education.map((education) => (
+                                        <ProfileEducation key={education._id} education={education} />
+                                    ))}
+                                </Fragment>
+                            ) : (
+                                <h4>No education credentials</h4>
+                            )}
+                        </div>
 
-            {profile.githubusername && (
-              <ProfileGithub username={profile.githubusername} />
+                        {profile.githubusername && <ProfileGithub username={profile.githubusername} />}
+                    </div>
+                </Fragment>
             )}
-          </div>
         </Fragment>
-      )}
-    </Fragment>
-  );
+    );
 };
 
 Profile.propTypes = {
-  getProfileById: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+    getProfileById: PropTypes.func.isRequired,
+    profile: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  profile: state.profile,
-  auth: state.auth
+const mapStateToProps = (state) => ({
+    profile: state.profile,
+    auth: state.auth,
 });
 
-export default connect(
-  mapStateToProps,
-  { getProfileById }
-)(Profile);
+export default connect(mapStateToProps, { getProfileById })(Profile);

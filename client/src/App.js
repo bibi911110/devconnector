@@ -11,49 +11,55 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
 // import your fontawesome library
-import 'font-awesome/css/font-awesome.min.css'
+import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
 import './darkmode.css';
 
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-
-const Wrapper = styled("div")`
-  background: ${props => props.theme.background};
-  height: auto;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen";
-  h1, h2, h3, h4, h5, h6, p, td, small {
-    color: ${props => props.theme.body};
-  }
+const Wrapper = styled('div')`
+    background: ${(props) => props.theme.background};
+    height: auto;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen';
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    td,
+    small {
+        color: ${(props) => props.theme.body};
+    }
 `;
 
 if (localStorage.token) {
-  setAuthToken(localStorage.token);
+    setAuthToken(localStorage.token);
 }
 const App = () => {
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, []);
 
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
-
-  return (
-    <Provider store={store}>
-      <Router>
-        <Fragment>
-        <Wrapper>
-          <Navbar />
-          <Switch>
-            <Route exact path='/' component={Landing} />
-            <Route component={Routes} />
-          </Switch>
-        </Wrapper>
-        </Fragment>
-      </Router>
-    </Provider>
-  );
-}
+    return (
+        <Provider store={store}>
+            <Router>
+                <Fragment>
+                    <Wrapper>
+                        <Navbar />
+                        <Switch>
+                            <Route exact path="/" component={Landing} />
+                            <Route component={Routes} />
+                        </Switch>
+                    </Wrapper>
+                </Fragment>
+            </Router>
+        </Provider>
+    );
+};
 
 export default App;
